@@ -1,0 +1,75 @@
+name: PDF creation
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+  pull_request:
+    branches:
+      - 'master'
+      - 'release-candidate'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: setup lint
+        run: npm install -g textlint textlint-rule-prh textlint-rule-aws-spellcheck textlint-rule-preset-ja-technical-writing textlint-rule-spellcheck-tech-word
+      - name: run lint
+        run: find docs -name \*.md | xargs -I{} sh -c "textlint {}"
+        continue-on-error: true
+
+  build:
+    needs: lint
+    runs-on: ubuntu-latest
+    container: vvakame/review:4.0
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup md2review
+        run: apt-get update -y && apt-get -y install build-essential ruby-dev && gem install md2review
+      - name: setup node
+        run: apt-get -y install nodejs
+      - name: find md
+        run: for a in `find docs -name \*.md | sort`; do md2review "${a}" > `basename "${a}" .md`.re; done;
+      - name: create catalog.yml
+        run: echo "PREDEF:\n" > catalog.yml;echo "CHAPS:" >> catalog.yml;for a in `find . -name \*.re | sort`; do echo "  - `basename "${a}" .md`" >>  catalog.yml; done;echo "\nPREDEF:\n" >> catalog.yml;echo "POSTDEF:\n" >> catalog.yml;
+      - name: create pdf
+        run: review-pdfmaker config.yml
+      - name: upload pdf
+        uses: actions/upload-artifact@v1
+        with:
+          name: pdf
+          path: sample_book.pdf
+
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: download pdf
+        uses: actions/download-artifact@v1
+        with:
+          name: pdf
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
+      - name: upload release asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: pdf/sample_book.pdf
+          asset_name: sample_book.pdf
+          asset_content_type: application/pdf

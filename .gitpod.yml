@@ -1,0 +1,8 @@
+image:
+  file: .gitpod.dockerfile
+
+vscode:
+  extensions:
+    - taichi.vscode-textlint@0.7.1:Hvok7NbvU+sOw/9eCHmK3w==
+    - ICS.japanese-proofreading@0.2.3:LCGwudLGap12My+V/cgcRw==
+    - 8amjp.charactercount@0.1.5:jYNfIAaYPX160uZBSkIbHA==

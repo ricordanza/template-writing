@@ -1,0 +1,84 @@
+# この設定ファイルでサポートするRe:VIEWのバージョン番号。
+# major versionが違うときにはエラーを出す。
+review_version: 4.0
+
+# ブック名(ファイル名になるもの。ASCII範囲の文字を使用)
+bookname: sample_book
+# 記述言語。省略した場合はja
+language: ja
+
+# 書名
+booktitle: {name: "サンプル", file-as: "sample book"}
+
+# 著者名。「, 」で区切って複数指定できる
+aut: [{name: "Ricordanza", file-as: "ricordanza"}]
+
+# 以下はオプション
+# a-edt, edt: 編集者
+edt: ["my editor"]
+# a-pbl, pbl: 出版社（発行所）
+pbl: exsample.com.
+
+# 刊行日(省略した場合は実行時の日付)
+date: 2020-1-1
+# 発行年月。YYYY-MM-DD形式による配列指定。省略した場合はdateを使用する
+# 複数指定する場合は次のように記述する
+# [["初版第1刷の日付", "初版第2刷の日付"], ["第2版第1刷の日付"]]
+# 日付の後ろを空白文字で区切り、任意の文字列を置くことも可能。
+history: [["2020-1-1 v0.0.1"]]
+# 権利表記(配列で複数指定可)
+# rights: (C) 2016 Re:VIEW Developers
+rights: (C) 2020 
+
+# デバッグフラグ。nullでないときには一時ファイルをカレントディレクトリに作成し、削除もしない
+debug: null
+
+# HTMLファイルの拡張子(省略した場合はhtml)
+htmlext: html
+#
+# CSSファイル(配列で複数指定可、yamlファイルおよびRe:VIEWファイルを置いたディレクトリにあること)
+stylesheet: ["style.css"]
+
+# ePUBのバージョン (2か3)
+epubversion: 3
+#
+# HTMLのバージョン (4か5。epubversionを3にしたときには5にする)
+htmlversion: 5
+
+# 目次として抽出する見出しレベル
+toclevel: 3
+
+# 採番の設定。採番させたくない見出しには「==[nonum]」のようにnonum指定をする
+#
+# 本文でセクション番号を表示する見出しレベル
+secnolevel: 3
+
+# 本文中に目次ページを作成するか。省略した場合はnull (作成しない)
+toc: true
+
+# 表紙の後に大扉ページを作成するか。省略した場合はnull (作成しない)
+titlepage: true
+
+# 奥付を作成するか。デフォルトでは作成されない。trueを指定するとデフォルトの奥付、ファイル名を指定するとそれがcolophon.htmlとしてコピーされる
+colophon: true
+
+# EPUBにおけるページ送りの送り方向、page-progression-directionの値("ltr"|"rtl"|"default")
+direction: "ltr"
+
+epubmaker:
+  # HTMLファイルの拡張子
+  htmlext: xhtml
+  stylesheet: ["style.css"]
+
+# LaTeX用のスタイルファイル(styディレクトリ以下に置くこと)
+texstyle: ["reviewmacro"]
+
+# A5の設定(10pt 45文字×30行) - 紙版
+texdocumentclass: ["review-jsbook", "media=print,paper=a5,serial_pagination=true,hiddenfolio=nikko-pc,openany,fontsize=10pt,baselineskip=15.4pt,line_length=45zw,number_of_lines=30,head_space=30mm,headsep=10mm,headheight=5mm,footskip=10mm"]
+
+pdfmaker:
+  # 奥付を作成するか。trueを指定するとデフォルトの奥付、ファイル名を指定するとそれがcolophon.htmlとしてコピーされる
+  colophon: true
+
+webmaker:
+    stylesheet: ["style.css"]
