@@ -27,4 +27,4 @@ catalog.yml を自動生成するのでmdファイルをわけて管理する場
 - [vscode-textlint](https://marketplace.visualstudio.com/items?itemName=taichi.vscode-textlint)
 - [CharacterCount](https://marketplace.visualstudio.com/items?itemName=8amjp.charactercount)
 
-ファイルの保存時にフォーマットをかけるようにしているのでlintで修正可能なものは自動修します。
+ファイルの保存時にフォーマットをかけるようにしているのでlintで修正可能なものは自動修正します。
